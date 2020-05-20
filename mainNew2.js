@@ -1,3 +1,4 @@
+//debugger
 var VideoContainer = document.getElementById("video_info");
 
 var digitado  = document.getElementById("text-to-find");
@@ -19,8 +20,12 @@ console.log ("OurData", OurData);
 //renderHTML(OurData);
 //coletatags(OurData);
 coletatags(OurData);
+console.log("PASSEI");
+naoPesquisa(OurData);
 autocomplete(document.getElementById("text-to-find"), alltags);
 };
+
+
 
 ourRequest.send();
 
@@ -75,6 +80,13 @@ function pesquisar (item){
     mostrarvideo(OurData);    
 
   //  console.log("OurDataVideo", OurData[i].pl);
+    } else if (item === "")  {
+
+      
+      console.log("PASSEI2");
+      naoPesquisa(OurData);
+      
+
     } else {
         
     console.log("FALSE",OurData[i].tg);  
@@ -101,28 +113,29 @@ function mostrarvideo(data){
 
    //var htmlString = '<center><a href="' + data[i].name +'"> <img src="'+ data[i].thumb + '" style="width:640px;height:360px;border:0;"></a></center>'+"<br>"+ "<center>" +data[i].label + "</center>" +"<br>";
   
-   var htmlString =  data[i].label; 
+      var htmlString =  data[i].label; 
 
-   jwplayer("myElement").setup({playlist: data[i].name});
+   
+
+  // jwplayer("myElement").setup({playlist: data[i].name});
   // console.log("HTML", htmlString);
-  VideoContainer.insertAdjacentHTML('beforeend',htmlString);
+      jwplayer("myElement").setup({playlist: data[i].name});
+      VideoContainer.insertAdjacentHTML('beforeend',htmlString);
+     
+      console.log("MVNODESCRIA", VideoContainer.childNodes[i]);
+      console.log("MVNODESCRIADOS", VideoContainer.childNodes.length);
     
   // for (i=0; i<VideoContainer.childNodes.length; i++){
 
-    console.log("NODESCRIA", VideoContainer.childNodes[i]);
+    
   //  };
  
 };
 
-//function completar (data){  
-   
-    //console.log("DIGITADO", digitado.value);    
-
-//};
 
 function autocomplete(inp,arr) {
 
-   
+
    //console.log("input", inp);      
    console.log("array", arr);
     /*the autocomplete function takes two arguments,
@@ -131,7 +144,8 @@ function autocomplete(inp,arr) {
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, ii, val = this.value;
-        console.log("a",a);
+        var palavrasArray = [];
+        //console.log("a",a);
         //console.log("b",b);
         //console.log("i",i);
         //console.log("ii",ii);
@@ -149,10 +163,10 @@ function autocomplete(inp,arr) {
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
-          console.log(i);
-
+         //console.log(i);
+          
           for (ii = 0; ii < arr[i].length-1; ii++) {
-            console.log(ii);
+            //console.log(ii);
 
               if (arr[i].trim().substr(ii, val.length).toUpperCase() ==  val.toUpperCase()) {                      
                /*create a DIV element for each matching element:*/
@@ -164,7 +178,7 @@ function autocomplete(inp,arr) {
                //var destaque = "";
               // destaque = val;
                //b.innerHTML = "<strong>" + arr[i].substr(arr[i].indexOf(val), val.length)  +  "</strong>";
-               console.log("INDVAL", arr[i]);
+               //console.log("INDVAL", arr[i]);
                inPal = arr[i].substr(0,arr[i].indexOf(val));
                finPal = arr[i].substr(arr[i].indexOf(val)+val.length, arr[i].length-inPal.length-val.length);
                //console.log("InPalL", inPal.length);
@@ -179,9 +193,39 @@ function autocomplete(inp,arr) {
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();
-                
+
+
+              
+           
             });
-            a.appendChild(b); 
+           // debugger
+
+            
+           
+           
+            //console.log("at",a.childNodes.length);
+
+           // console.log("b",b.innerText);
+
+            //debugger
+         // for (i=0; i < palavrasArray.length; i++ ) {
+           // debugger
+          if (palavrasArray[i] != b.innerText) {
+              a.appendChild(b); 
+              palavrasArray[i]= b.innerText;
+              console.log("PARRAY", palavrasArray);
+             console.log("IGUAL", "TRUE");
+            } else {
+              
+              //console.log("a",a.innerText);
+             console.log("IGUAL", "FALSE");
+            };
+
+
+          //}
+
+
+            //console.log("CHILD", a.appendChild(b));
            
           } 
 
@@ -213,8 +257,18 @@ function autocomplete(inp,arr) {
             /*and simulate a click on the "active" item:*/
             if (x) x[currentFocus].click();
             pesquisar(OurData);
-          }
-        }
+          } else if (currentFocus = -1) {
+            console.log("ENTREI");
+            limpar();
+           naoPesquisa(OurData);
+
+          };
+
+    
+          };
+          
+
+       // }
     });
     function addActive(x) {
       /*a function to classify an item as "active":*/
@@ -251,13 +305,34 @@ function autocomplete(inp,arr) {
 
 function limpar() {
 
-  for (i=0; i<VideoContainer.childNodes.length; i=i) {
+
+   for (i=0; i<myElement.childNodes.length; i=i) {
+    myElement.removeChild(myElement.childNodes[i]);
+
+    };
+
+   
+    for (i=0; i<VideoContainer.childNodes.length; i=i) {
+ //   console.log("NODESREMOVE", VideoContainer.childNodes.length);
     VideoContainer.removeChild(VideoContainer.childNodes[i]);
-    console.log("NODESREMOVE", VideoContainer.childNodes.length);
+  //  console.log("NODESREMOVEi", VideoContainer.childNodes[i]);
  // VideoContainer.removeChild(VideoContainer.childNodes[1]);
-    }; 
+     }; 
     
 
 };
+
+function naoPesquisa (data) {
+
+    for (i=0; i<OurData.length; i++) { 
+      var htmlString = '<a href="' + data[i].name +'"> <img src="' + data[i].thumb + '" style="width:640px;height:360px;border:0;"></a>'+"<br>"+ "<center>" +data[i].label + "</center>" +"<br>";
+      VideoContainer.insertAdjacentHTML('beforeend',htmlString);
+      console.log("NODESCRIA", VideoContainer.childNodes[i]);
+      console.log("NODESCRIADOS", VideoContainer.childNodes.length);
+    };
+
+};
+
+
 
  
